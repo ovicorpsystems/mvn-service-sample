@@ -1,0 +1,10 @@
+name: build-dockerfile-image
+on:
+  workflow_dispatch:
+jobs:
+  call-workflow-in-another-repo:
+    name: python-build
+    uses: ovicorpsystems/workflows/.github/workflows/build-dockerfile-image.yml@main
+    secrets: inherit
+    with:
+      code-lang: java
