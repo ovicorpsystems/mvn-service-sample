@@ -9,9 +9,11 @@ jobs:
     steps:
       - name: Clone repo
         uses: actions/checkout@v2
+      - name: Build Docker
+        run: docker build -t mvn_test .
       - name: Run Docker mvn
 #        if: ${{ inputs.lang == 'java' }}
-        run: docker run --rm --detach --publish 8080:8080 --name mvn_test mvn
+        run: docker run --rm --detach --publish 8080:8080 --name mvn_test mvn_test
       - name: Run HawkScan
         uses: stackhawk/hawkscan-action@v2.0.0
         with:
