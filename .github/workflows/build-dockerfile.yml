@@ -1,9 +1,21 @@
-FROM maven:3.6.0-jdk-11-slim AS build
-COPY src /home/app/src
-COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package
+name: Test Docker Build
 
-FROM openjdk:11.0.11-jre-slim
-COPY --from=build /home/app/target/my-maven-docker-project-1.0-SNAPSHOT.jar /usr/local/lib/demo.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","/usr/local/lib/demo.jar"]
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build -t my-maven-app:test .
+          
+      - name: Test image (opcional)
+        run: |
+          docker run --rm my-maven-app:test echo "App compilada OK"
