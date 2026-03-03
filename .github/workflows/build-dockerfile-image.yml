@@ -1,10 +1,19 @@
 name: build-dockerfile-image
 on:
+  workflow_call:
+    inputs:
+      code-lang:
+        required: true
+        type: string
   workflow_dispatch:
+    inputs:
+      code-lang:
+        required: true
+        type: choice
+        options: [java, node, python]
 jobs:
   call-workflow-in-another-repo:
-    name: python-build
     uses: ovicorpsystems/workflows/.github/workflows/build-dockerfile-image.yml@main
     secrets: inherit
     with:
-      code-lang: java
+      code-lang: ${{ inputs.code-lang }}
